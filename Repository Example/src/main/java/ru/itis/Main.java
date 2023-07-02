@@ -2,14 +2,12 @@ package ru.itis;
 
 
 import ru.itis.models.Event;
-import ru.itis.models.User;
 import ru.itis.repositories.EventsRepository;
 import ru.itis.repositories.impl.EventsRepositoryFileImpl;
 import ru.itis.repositories.UsersRepository;
 import ru.itis.repositories.impl.UsersRepositoryFileImpl;
 import ru.itis.services.AppService;
 
-import java.time.LocalDate;
 import java.util.List;
 
 public class Main {

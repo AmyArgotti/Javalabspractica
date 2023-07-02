@@ -2,9 +2,9 @@ package ru.itis.repositories.impl;
 
 import ru.itis.models.User;
 import ru.itis.repositories.UsersRepository;
-
 import java.io.*;
 import java.util.ArrayList;
+import java.util.NoSuchElementException;
 
 public class UsersRepositoryFileImpl implements UsersRepository {
 
@@ -13,10 +13,10 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
     public UsersRepositoryFileImpl(String fileName) {
         this.fileName = fileName;
-        setUsersInMemory();
+        findEvents();
     }
 
-    public void setUsersInMemory(){
+    public void findEvents(){
         this.users = new ArrayList<>();
 
         try{
@@ -31,7 +31,7 @@ public class UsersRepositoryFileImpl implements UsersRepository {
                         .email(cols[1])
                         .password(cols[2]).build());
             }
-            System.out.println(users.size());
+           
         }catch(IOException error){
             System.out.println(error);
         }
@@ -42,7 +42,7 @@ public class UsersRepositoryFileImpl implements UsersRepository {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(fileName, true))){
             writer.write(model.getId() + "|" + model.getEmail() + "|" + model.getPassword());
             writer.newLine();
-            setUsersInMemory();
+            findEvents();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
@@ -50,21 +50,34 @@ public class UsersRepositoryFileImpl implements UsersRepository {
 
     @Override
     public User findByEmail(String emailUser) {
-        setUsersInMemory();
-       return this.users
-               .stream()
-               .filter(user -> user.getEmail().equals(emailUser))
-               .findFirst()
-               .get();
+        findEvents();
+        try{
+            return this.users
+                    .stream()
+                    .filter(user -> user.getEmail().equals(emailUser))
+                    .findFirst()
+                    .get();
+        }
+        catch(NoSuchElementException exception){
+            System.out.println(exception);
+            return null;
+        }
+
     }
 
     @Override
     public User findById(String id) {
-        setUsersInMemory();
-        return this.users.stream()
-                .filter(user -> user.getId().equals(id))
-                .findFirst()
-                .get();
+       try {
+           findEvents();
+           return this.users.stream()
+                   .filter(user -> user.getId().equals(id))
+                   .findFirst()
+                   .get();
+       }
+       catch(NoSuchElementException exception){
+           System.out.println(exception);
+           return null;
+       }
     }
 }
 

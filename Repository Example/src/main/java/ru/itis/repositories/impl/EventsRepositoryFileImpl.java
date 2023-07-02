@@ -6,26 +6,23 @@ import ru.itis.models.User;
 import ru.itis.repositories.EventsRepository;
 
 import java.io.*;
-import java.lang.reflect.Array;
 import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
+import java.util.NoSuchElementException;
 
 public class EventsRepositoryFileImpl implements EventsRepository {
     private final String eventFileName;
     private final String eventsAndUsersFileName;
-    private UsersRepositoryFileImpl usersRepositoryFile;
     private ArrayList<Event> events;
 
     public EventsRepositoryFileImpl(String eventFileName, String eventsAndUsersFileName) {
         this.eventFileName = eventFileName;
         this.eventsAndUsersFileName = eventsAndUsersFileName;
-        this.usersRepositoryFile = new UsersRepositoryFileImpl("users.txt");
-        saveEventsToMemory();
+        findEvents();
     }
 
-    public void saveEventsToMemory(){
+    public void findEvents(){
         this.events = new ArrayList<>();
 
         try{
@@ -51,7 +48,7 @@ public class EventsRepositoryFileImpl implements EventsRepository {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(eventFileName, true))){
             writer.write(model.getId() + "|" + model.getName() + "|" + model.getDate());
             writer.newLine();
-            saveEventsToMemory();
+            findEvents();
         } catch (IOException e) {
             throw new IllegalArgumentException(e);
         }
@@ -59,20 +56,32 @@ public class EventsRepositoryFileImpl implements EventsRepository {
 
     @Override
     public Event findByName(String nameEvent) {
-       return this.events
-               .stream()
-               .filter(event -> nameEvent.equalsIgnoreCase(event.getName()))
-               .findFirst()
-               .get();
+      try {
+          return this.events
+                  .stream()
+                  .filter(event -> nameEvent.equalsIgnoreCase(event.getName()))
+                  .findFirst()
+                  .get();
+      }
+      catch(NoSuchElementException exception){
+          System.out.println(exception);
+          return null;
+      }
     }
 
     @Override
     public Event findById(String id) {
-        return this.events
-                .stream()
-                .filter(event -> event.getId().equals(id))
-                .findFirst()
-                .get();
+        try {
+            return this.events
+                    .stream()
+                    .filter(event -> event.getId().equals(id))
+                    .findFirst()
+                    .get();
+        }
+        catch (NoSuchElementException exception){
+            System.out.println(exception);
+            return null;
+        }
     }
 
     @Override
