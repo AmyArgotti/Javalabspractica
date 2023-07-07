@@ -1,19 +1,53 @@
 package ru.itis;
 
-// Press Shift twice to open the Search Everywhere dialog and type `show whitespaces`,
-// then press Enter. You can now see whitespace characters in your code.
+import com.zaxxer.hikari.HikariConfig;
+import com.zaxxer.hikari.HikariDataSource;
+import ru.itis.models.Course;
+import ru.itis.models.Student;
+import ru.itis.repositories.CourseRepository;
+import ru.itis.repositories.CoursesRepositoryJdbcImpl;
+import ru.itis.repositories.StudentsRepository;
+import ru.itis.repositories.StudentsRepositoryJdbcImpl;
+
 public class Main {
     public static void main(String[] args) {
-        // Press Opt+Enter with your caret at the highlighted text to see how
-        // IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+        HikariConfig hikariConfig = new HikariConfig();
+        hikariConfig.setJdbcUrl("jdbc:postgresql://localhost:54321/taxi_db");
+        hikariConfig.setUsername("postgres");
+        hikariConfig.setPassword("Hermine2023");
+        hikariConfig.setDriverClassName("org.postgresql.Driver");
 
-        // Press Ctrl+R or click the green arrow button in the gutter to run the code.
-        for (int i = 1; i <= 5; i++) {
+        HikariDataSource dataSource = new HikariDataSource(hikariConfig);
 
-            // Press Ctrl+D to start debugging your code. We have set one breakpoint
-            // for you, but you can always add more by pressing Cmd+F8.
-            System.out.println("i = " + i);
-        }
+        StudentsRepository studentsRepository = new StudentsRepositoryJdbcImpl(dataSource);
+
+        Student student = Student.builder()
+                .firstName("Dome")
+                .lastName("Tuqueres")
+                .age(21)
+                .build();
+
+//        System.out.println(student);
+        studentsRepository.save(student);
+        System.out.println(student);
+        System.out.println(studentsRepository.findAll());
+///==============================================================
+
+
+
+        HikariDataSource dataSource = new HikariDataSource(hikariConfig);
+        CourseRepository coursesRepository = new CoursesRepositoryJdbcImpl(dataSource);
+
+        Course course = Course.builder()
+                .title("C++")
+               .startDate("08.12.2012")
+               .finishDate("09.02.2023")
+                .build();
+
+//        System.out.println(student);
+        coursesRepository.save(course);
+        System.out.println(course);
+
+        System.out.println(coursesRepository.findAll());
     }
 }
