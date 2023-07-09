@@ -9,6 +9,9 @@ import ru.itis.repositories.CoursesRepositoryJdbcImpl;
 import ru.itis.repositories.StudentsRepository;
 import ru.itis.repositories.StudentsRepositoryJdbcImpl;
 
+import java.sql.Date;
+
+
 public class Main {
     public static void main(String[] args) {
         HikariConfig hikariConfig = new HikariConfig();
@@ -17,9 +20,9 @@ public class Main {
         hikariConfig.setPassword("Hermine2023");
         hikariConfig.setDriverClassName("org.postgresql.Driver");
 
-        HikariDataSource dataSource = new HikariDataSource(hikariConfig);
+        HikariDataSource dataSource1 = new HikariDataSource(hikariConfig);
 
-        StudentsRepository studentsRepository = new StudentsRepositoryJdbcImpl(dataSource);
+        StudentsRepository studentsRepository = new StudentsRepositoryJdbcImpl(dataSource1);
 
         Student student = Student.builder()
                 .firstName("Dome")
@@ -40,8 +43,8 @@ public class Main {
 
         Course course = Course.builder()
                 .title("C++")
-               .startDate("08.12.2012")
-               .finishDate("09.02.2023")
+                .startDate(new Date(2012, 12, 8))
+                .finishDate(new Date(2023, 2, 9))
                 .build();
 
 //        System.out.println(student);

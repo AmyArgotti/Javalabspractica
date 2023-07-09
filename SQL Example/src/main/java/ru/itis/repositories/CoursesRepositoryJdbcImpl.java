@@ -1,6 +1,5 @@
 package ru.itis.repositories;
 
-import lombok.Data;
 import ru.itis.models.Course;
 
 import javax.sql.DataSource;
@@ -25,8 +24,8 @@ public class CoursesRepositoryJdbcImpl implements CourseRepository {
         try (Connection connection = dataSource.getConnection()) {
             try (PreparedStatement statement = connection.prepareStatement(SQL_INSERT, Statement.RETURN_GENERATED_KEYS)) {
                 statement.setString(1, model.getTitle());
-                statement.setDate(2,  model.getStart_date());
-                statement.setDate(3,  model.getFinish_date());
+                statement.setDate(2,  model.getStartDate());
+                statement.setDate(3,  model.getFinishDate());
 
                 int affectedRows = statement.executeUpdate();
 

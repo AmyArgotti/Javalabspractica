@@ -5,6 +5,9 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.sql.Date;
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -14,7 +17,6 @@ import lombok.NoArgsConstructor;
 public class Course {
     private Integer id;
     private String title;
-    private Data start_date;
-    private Data finish_date;
-
+    private Date startDate;
+    private Date finishDate;
 }
