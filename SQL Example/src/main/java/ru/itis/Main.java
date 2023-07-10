@@ -18,7 +18,7 @@ public class Main {
         hikariConfig.setDriverClassName("org.postgresql.Driver");
 
         HikariDataSource dataSource1 = new HikariDataSource(hikariConfig);
-        System.out.println("Students list");
+        System.out.println("Students list []");
         StudentsRepository studentsRepository = new StudentsRepositoryJdbcImpl(dataSource1);
 
         Student student = Student.builder()
@@ -50,7 +50,7 @@ public class Main {
 ///==============================================================
 
 
-        System.out.println("Courses list");
+        System.out.println("Courses list []");
 
         HikariDataSource dataSource = new HikariDataSource(hikariConfig);
         CourseRepository coursesRepository = new CoursesRepositoryJdbcImpl(dataSource);
@@ -64,7 +64,6 @@ public class Main {
         coursesRepository.save(course);
         System.out.println(course);
 
-        System.out.println(coursesRepository.findAll());
 ///==============================================================
         CourseRepository coursesRepositorySpringJdbc = new CoursesRepositorySpringJdbcImpl(dataSource1);
 
